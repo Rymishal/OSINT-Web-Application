@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  osint-app:
+    build: .
+    depends_on:
+      - postgres
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=2432
+      - DB_NAME=osintdb
+      - DB_USER=osintuser
+      - DB_PASSWORD=osintpass
+    networks:
+      - osint-net
+    command: ["scan", "-o", "stdout", "example.com"]
+
+  postgres:
+    image: postgres:15
+    restart: always
+    ports:
+      - "2432:5432"
+    environment:
+      POSTGRES_DB: osintdb
+      POSTGRES_USER: osintuser
+      POSTGRES_PASSWORD: osintpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - osint-net
+
+  amass:
+    image: caffix/amass
+    container_name: amass
+    restart: always
+    networks:
+      - osint-net
+    entrypoint: ["sleep", "infinity"]
+    volumes:
+      - ./config:/.config/amass:rw
+      - ./data/amass:/data:rw
+
+  theharvester:
+    image: simonthomas/theharvester
+    container_name: theharvester
+    restart: always
+    tty: true
+    stdin_open: true
+    networks:
+      - osint-net
+
+networks:
+  osint-net:
+
+volumes:
+  postgres_data:
