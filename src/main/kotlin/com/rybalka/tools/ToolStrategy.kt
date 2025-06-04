@@ -1,11 +1,6 @@
 package com.rybalka.tools
 
-import com.rybalka.filter.ResultFilter
-
-class ToolStrategy {
-    fun createAll(domain: String, scanId: String): List<ToolAdapter> =
-        listOf(
-            AmassAdapter(),
-            HarvesterAdapter()
-        )
+interface ToolStrategy {
+    fun createProcess(domain: String): ProcessBuilder
+    fun getName(): String
 }

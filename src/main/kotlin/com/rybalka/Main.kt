@@ -4,20 +4,17 @@ import com.rybalka.repository.ScanDataRepository
 import com.rybalka.repository.ScanElementRepository
 import com.rybalka.service.ScanMode
 import com.rybalka.service.ScanService
-import com.rybalka.tools.AmassAdapter
-import com.rybalka.tools.HarvesterAdapter
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-
-private val logger: Logger? = LogManager.getLogger("ScanService")
+import com.rybalka.tools.Adapter
+import com.rybalka.tools.AmassStrategy
+import com.rybalka.tools.HarvesterStrategy
 
 suspend fun main(args: Array<String>) {
     val mode = ScanMode.parse(args)
     val service = ScanService(
         ScanDataRepository(),
         ScanElementRepository(),
-        HarvesterAdapter(),
-        AmassAdapter()
+        Adapter(HarvesterStrategy()),
+        Adapter(AmassStrategy())
     )
 
     when (mode) {

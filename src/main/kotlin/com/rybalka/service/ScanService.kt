@@ -5,8 +5,7 @@ import com.rybalka.filter.ResultFilter
 import com.rybalka.model.ScanData
 import com.rybalka.repository.ScanDataRepository
 import com.rybalka.repository.ScanElementRepository
-import com.rybalka.tools.AmassAdapter
-import com.rybalka.tools.HarvesterAdapter
+import com.rybalka.tools.Adapter
 import com.rybalka.util.IncorrectIdException
 import com.rybalka.util.ToolFailureException
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -16,8 +15,8 @@ import kotlinx.coroutines.coroutineScope
 
 class ScanService(private val scanDataRepository: ScanDataRepository,
                   private val scanElementRepository: ScanElementRepository,
-                  private val harvesterAdapter: HarvesterAdapter,
-                  private val amassAdapter: AmassAdapter) {
+                  private val harvesterAdapter: Adapter,
+                  private val amassAdapter: Adapter) {
     private val logger = KotlinLogging.logger {}
 
     suspend fun runScan(domain: String, outputType: OutputType, fileName: String) = coroutineScope {

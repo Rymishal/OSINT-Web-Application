@@ -4,8 +4,7 @@ import com.rybalka.model.ScanData
 import com.rybalka.model.ScanElement
 import com.rybalka.repository.ScanDataRepository
 import com.rybalka.repository.ScanElementRepository
-import com.rybalka.tools.AmassAdapter
-import com.rybalka.tools.HarvesterAdapter
+import com.rybalka.tools.Adapter
 import com.rybalka.util.IncorrectIdException
 import com.rybalka.util.ToolFailureException
 import io.mockk.every
@@ -20,8 +19,8 @@ class ScanServiceTest {
 
     private val scanDataRepository = mockk<ScanDataRepository>()
     private val scanElementRepository = mockk<ScanElementRepository>()
-    private val harvesterAdapter = mockk<HarvesterAdapter>()
-    private val amassAdapter = mockk<AmassAdapter>()
+    private val harvesterAdapter = mockk<Adapter>()
+    private val amassAdapter = mockk<Adapter>()
 
     private lateinit var scanService: ScanService
 
