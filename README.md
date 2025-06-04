@@ -25,3 +25,9 @@ docker-compose run --rm osint-app --scan -o stdout microsoft.com
 ```bash
 docker-compose run --rm osint-app --retrieve -o stdout <SCAN_ID>
 ```
+
+## Docker.hub
+To load osint-app from docker.hub
+```bash
+docker pull rymishal/osint-app:latest
+```
