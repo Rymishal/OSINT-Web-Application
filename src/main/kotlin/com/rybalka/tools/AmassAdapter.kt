@@ -6,13 +6,18 @@ import com.rybalka.util.ToolFailureException
 
 class AmassAdapter : ToolAdapter {
     override fun run(domain: String): List<String> {
-        val process = ProcessBuilder("docker", "exec", "amass", "amass", "enum", "-d", domain)
+        val process = ProcessBuilder("docker", "run", "--rm", "caffix/amass", "enum", "-d", domain)
             .start()
-        val code = process.waitFor()
-        val out = process.inputStream.bufferedReader().readLines()
-        if (code != 0) {
-            throw ToolFailureException("Amass processzz failed with code $code")
+        val output = StringBuilder()
+        process.inputStream.bufferedReader().useLines { lines ->
+            lines.forEach { line ->
+                output.appendLine(line)
+            }
         }
-        return out
+        val code = process.waitFor()
+        if (code != 0) {
+            throw ToolFailureException("Amass process failed with code $code")
+        }
+        return output.lines()
     }
 }

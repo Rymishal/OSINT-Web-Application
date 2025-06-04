@@ -2,24 +2,26 @@ version: "3.9"
 
 services:
   osint-app:
+    container_name: osint-app
     build: .
+    image: rybalka-osint-app
     depends_on:
       - postgres
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=2432
-      - DB_NAME=osintdb
+      - JDBC_DATABASE_URL=jdbc:postgresql://osint-postgres:5432/osintdb
       - DB_USER=osintuser
       - DB_PASSWORD=osintpass
     networks:
       - osint-net
-    command: ["scan", "-o", "stdout", "example.com"]
+    command: ["--scan", "-o", "stdout", "microsoft.com"]
 
   postgres:
     image: postgres:15
+    container_name: osint-postgres
     restart: always
     ports:
       - "2432:5432"

@@ -5,13 +5,19 @@ import com.rybalka.util.ToolFailureException
 class HarvesterAdapter
     : ToolAdapter {
     override fun run(domain: String): List<String> {
-        val process = ProcessBuilder("docker", "exec", "theharvester", "theharvester", "-d", domain, "-b", "bing")
+        val process = ProcessBuilder("docker", "run", "--rm", "simonthomas/theharvester", "theharvester", "-d", domain, "-b", "bing")
+            .redirectErrorStream(true)
             .start()
+        val output = StringBuilder()
+        process.inputStream.bufferedReader().useLines { lines ->
+            lines.forEach { line ->
+                output.appendLine(line)
+            }
+        }
         val code = process.waitFor()
-        val out = process.inputStream.bufferedReader().readLines()
         if (code != 0) {
             throw ToolFailureException("Harvester process failed with code $code")
         }
-        return out
+        return output.lines()
     }
 }
