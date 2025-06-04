@@ -31,7 +31,6 @@ services:
       POSTGRES_PASSWORD: osintpass
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./src/main/resources/scan_result.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - osint-net
 
