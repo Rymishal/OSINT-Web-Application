@@ -45,7 +45,7 @@ class ScanService(private val scanDataRepository: ScanDataRepository,
                     logger.info { "Amass started for scan: ${scanData.id}  ${scanData.domain}" }
                     val raw = amassAdapter.run(domain)
                     logger.info { "Amass successfully finished" }
-                    ResultFilter(Regex(" --> ")).filter(raw, scanData.id!!)
+                    ResultFilter(Regex(".* --> .*")).filter(raw, scanData.id!!)
 
                 } catch (e: Exception) {
                     logger.warn { e.message!! }
