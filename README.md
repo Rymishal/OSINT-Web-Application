@@ -31,3 +31,16 @@ To load osint-app from docker.hub
 ```bash
 docker pull rymishal/osint-app:latest
 ```
+
+## Create and run with image pulled from docker hub(I created new docker-compose-dev file to make creation process faster)
+
+```bash
+docker-compose up -f docker-compose-dev.yml
+```
+```bash
+docker-compose -f docker-compose-dev.yml run osint-app-dev --scan -o stdout microsoft.com
+```
+
+```bash
+docker-compose run osint-app-dev --rm osint-app-dev --retrieve -o stdout <SCAN_ID>
+```

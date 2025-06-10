@@ -8,13 +8,14 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./data:/app/data
-      - ./logs:/app/logs
+      - ./volumes/data:/app/data
+      - ./volumes/logs:/app/logs
+      - ./volumes/output:/app/output
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - JDBC_DATABASE_URL=jdbc:postgresql://osint-postgres:5432/osintdb
-      - DB_USER=osintuser
-      - DB_PASSWORD=osintpass
+      JDBC_DATABASE_URL: jdbc:postgresql://osint-postgres:5432/osintdb
+      DB_USER: osintuser
+      DB_PASSWORD: osintpass
     networks:
       - osint-net
     command: ["--scan", "-o", "stdout", "microsoft.com"]
@@ -30,7 +31,7 @@ services:
       POSTGRES_USER: osintuser
       POSTGRES_PASSWORD: osintpass
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - osint-net
 
@@ -42,8 +43,8 @@ services:
       - osint-net
     entrypoint: ["sleep", "infinity"]
     volumes:
-      - ./config:/.config/amass:rw
-      - ./data/amass:/data:rw
+      - ./volumes/config:/.config/amass:rw
+      - ./volumes/data/amass:/data:rw
 
   theharvester:
     image: simonthomas/theharvester
@@ -56,6 +57,3 @@ services:
 
 networks:
   osint-net:
-
-volumes:
-  postgres_data:

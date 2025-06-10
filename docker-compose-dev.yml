@@ -1,0 +1,43 @@
+version: '3.8'
+
+name: osint-application-dev
+
+services:
+
+  db:
+    image: postgres:15
+    container_name: osint-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: osintdb
+      POSTGRES_USER: osintuser
+      POSTGRES_PASSWORD: osintpwd
+    ports:
+      - "1432:5432"
+    networks:
+      - osint-net-dev
+    volumes:
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  osint-app:
+    image: rymishal/osint-app:latest
+    container_name: osint-app-dev
+    depends_on:
+      - db
+    environment:
+      JDBC_DATABASE_URL: jdbc:postgresql://osint-postgres-dev:5432/osintdb
+      DB_USER: osintuser
+      DB_PASSWORD: osintpwd
+    volumes:
+      - ./volumes/data:/app/data
+      - ./volumes/logs:/app/logs
+      - ./volumes/output:/app/output
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - osint-net-dev
+    command: ["--scan", "-o", "stdout", "microsoft.com"]
+#    command: ["--retrieve", "-o", "EXCEL", "/app/output/output.xlsx", "4d2b6c0f-0e26-490b-8099-d7e47d9ab3a4"]
+
+networks:
+  osint-net-dev:
+    driver: bridge
