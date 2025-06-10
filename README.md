@@ -16,14 +16,14 @@ docker-compose build
 docker-compose up
 ```
 
-### Run in Scanning Mode
+### Run in Scanning Mode with any domain
 ```bash
 docker-compose run --rm osint-app --scan -o stdout microsoft.com
 ```
 
 ### Run in Retrieve Mode
 ```bash
-docker-compose run --rm osint-app --retrieve -o stdout <SCAN_ID>
+docker-compose run --rm osint-app --retrieve -o excel /app/output/output.xlsx <SCAN_ID>
 ```
 
 ## Docker.hub
@@ -35,12 +35,12 @@ docker pull rymishal/osint-app:latest
 ## Create and run with image pulled from docker hub(I created new docker-compose-dev file to make creation process faster)
 
 ```bash
-docker-compose up -f docker-compose-dev.yml
+docker-compose -f docker-compose-dev.yml up
 ```
 ```bash
-docker-compose -f docker-compose-dev.yml run osint-app-dev --scan -o stdout microsoft.com
+docker-compose -f docker-compose-dev.yml run osint-app --scan -o stdout microsoft.com
 ```
 
 ```bash
-docker-compose run osint-app-dev --rm osint-app-dev --retrieve -o stdout <SCAN_ID>
+docker-compose -f docker-compose-dev.yml  run --rm osint-app --retrieve -o excel /app/output/output.xlsx <SCAN_ID>
 ```

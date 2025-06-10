@@ -17,6 +17,7 @@ services:
     networks:
       - osint-net-dev
     volumes:
+      - postgres-data:/var/lib/postgresql/data
       - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   osint-app:
@@ -40,4 +41,6 @@ services:
 
 networks:
   osint-net-dev:
-    driver: bridge
+
+volumes:
+  postgres-data:
