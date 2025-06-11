@@ -15,8 +15,9 @@ class ExcelExporter(private val fileName: String) : ResultExporter {
 
             scanData.elements!!.forEachIndexed { index, item ->
                 val row = sheet.createRow(index)
-                row.createCell(0).setCellValue(item.id)
-                row.createCell(1).setCellValue(item.value)
+                row.createCell(0).setCellValue(scanData.id)
+                row.createCell(1).setCellValue(item.id)
+                row.createCell(2).setCellValue(item.value)
             }
             val file = File(fileName)
             workbook.write(file.outputStream())
